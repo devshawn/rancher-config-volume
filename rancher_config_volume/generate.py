@@ -9,7 +9,7 @@ from requests.packages.urllib3.util.retry import Retry
 
 class Generator:
     def __init__(self):
-        retries = Retry(total=5, backoff_factor=0.5, status_forcelist=[502, 503, 504, 500])
+        retries = Retry(total=6, backoff_factor=0.5, status_forcelist=[502, 503, 504, 500, 404])
         self.command = self.get_command()
         self.session = requests.Session()
         self.session.mount('http://', HTTPAdapter(max_retries=retries))
