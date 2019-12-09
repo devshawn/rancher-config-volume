@@ -1,4 +1,3 @@
-import os
 import socket
 from functools import partial
 from http.server import BaseHTTPRequestHandler, HTTPServer
