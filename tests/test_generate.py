@@ -1,8 +1,10 @@
-from rancher_config_volume import generate
-import pytest
-import mock
-from tests import mocks
 import os
+
+import mock
+import pytest
+
+from rancher_config_volume import generate
+from tests import mocks
 
 test_arguments = [
     ("config/app", "config/app"),
@@ -46,6 +48,7 @@ def test_get_arg_failure():
 def test_get_config_path():
     mock_name = "config/0-success"
     port = setup_mock_server("test")
+    os.environ["RANCHER_RUN_FOREVER"] = "false"
     os.environ["RANCHER_METADATA_HOST"] = "localhost:{}".format(port)
     with mock.patch('sys.argv', ["file_name", mock_name]):
         generator = generate.Generator()
@@ -56,6 +59,7 @@ def test_get_config_path():
 def test_get_config_content():
     mock_name = "config/0-success"
     port = setup_mock_server("test")
+    os.environ["RANCHER_RUN_FOREVER"] = "false"
     os.environ["RANCHER_METADATA_HOST"] = "localhost:{}".format(port)
     with mock.patch('sys.argv', ["file_name", mock_name]):
         generator = generate.Generator()
@@ -68,6 +72,7 @@ def test_get_config_content():
 def test_execute_case_0(mock_makedirs, mock_name, path, makedir_path, content):
     # Happy path
     port = setup_mock_server("test")
+    os.environ["RANCHER_RUN_FOREVER"] = "false"
     os.environ["RANCHER_METADATA_HOST"] = "localhost:{}".format(port)
     with mock.patch('sys.argv', ["file_name", mock_name]):
         mock_open = mock.mock_open()
@@ -84,6 +89,7 @@ def test_execute_case_0(mock_makedirs, mock_name, path, makedir_path, content):
 def test_execute_case_1():
     # Host cannot be found, should exit
     mock_name = "config/0-success"
+    os.environ["RANCHER_RUN_FOREVER"] = "false"
     os.environ["RANCHER_METADATA_HOST"] = "none"
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         with mock.patch('sys.argv', ["file_name", mock_name]):

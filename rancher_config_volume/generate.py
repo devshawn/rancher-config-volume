@@ -1,5 +1,6 @@
 import os
 import sys
+from time import sleep
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -12,6 +13,7 @@ class Generator:
         self.command = self.get_command()
         self.session = requests.Session()
         self.session.mount('http://', HTTPAdapter(max_retries=retries))
+        self.run_forever = os.environ.get("RANCHER_RUN_FOREVER", "true") == "true"
         self.base_url = os.environ.get("RANCHER_METADATA_HOST", "rancher-metadata")
 
     @staticmethod
@@ -52,6 +54,10 @@ class Generator:
             f.write(content)
 
         print("Wrote config file to path: {}".format(path))
+
+        if self.run_forever:
+            while not sleep(5):
+                pass
 
 
 def main():
